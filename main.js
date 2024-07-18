@@ -68,111 +68,92 @@ links.forEach(link => {
     })
 })
 //surah Api
-document.addEventListener('DOMContentLoaded', () => {
-    getSurahs();
-    getPrayTimes();
-});
-
+let SurahContainer = document.querySelector('.surahContainer')
+getSurahs()
 function getSurahs() {
     fetch("https://api.alquran.cloud/v1/meta")
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-            let SurahContainer = document.querySelector('.surahContainer');
             let surahs = data.data.surahs.references;
             let numberOfSurahs = 114;
-            SurahContainer.innerHTML = "";
+            SurahContainer.innerHTML = ""
             for (let i = 0; i < numberOfSurahs; i++) {
                 SurahContainer.innerHTML += `
                 <div class="surah">
                     <p>${surahs[i].name}</p>
-                    <p>${surahs[i].englishName}</p>
-                </div>`;
+                    <p>${surahs[i].englishName} </p>
+                </div>`
             }
             for (let j = 0; j < 3; j++) {
                 SurahContainer.innerHTML += `
                 <div class="surah hidden">
                     <p></p>
                     <p></p>
-                </div>`;
+                </div>`
             }
-            let SurahTitles = document.querySelectorAll('.surah');
+            let SurahsTitels = document.querySelectorAll('.surah');
             let popup = document.querySelector('.surah-popup'),
                 AyatContainer = document.querySelector('.ayat');
-            SurahTitles.forEach((title, index) => {
-                title.addEventListener('click', () => {
+            SurahsTitels.forEach((title,index)=>{
+                title.addEventListener('click', ()=>{
                     fetch(`https://api.alquran.cloud/v1/surah/${index + 1}`)
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            return response.json();
-                        })
+                        .then(response => response.json())
                         .then(data => {
                             AyatContainer.innerHTML = "";
                             let Ayat = data.data.ayahs;
-                            Ayat.forEach(aya => {
+                            Ayat.forEach(aya=>{
                                 popup.classList.add('active');
-                                if (index + 1 !== 9 && aya.text.includes("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ")) {
-                                    AyatContainer.innerHTML += `<div class="basmala">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>`;
-                                    let remainingText = aya.text.replace("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", "");
+                                if (index + 1 !== 9 && aya.text.includes("بِسۡمِ ٱللَّهِ ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ")) {
+                                    AyatContainer.innerHTML += `<div class="basmala">بِسۡمِ ٱللَّهِ ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ</div>`;
+                                    let remainingText = aya.text.replace("بِسۡمِ ٱللَّهِ ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ", "");
                                     if (remainingText.trim().length > 0) {
                                         AyatContainer.innerHTML += `<p>(${aya.numberInSurah}) - ${remainingText}</p>`;
                                     }
                                 } else {
-                                    AyatContainer.innerHTML += `<p>${aya.text} {${aya.numberInSurah}}</p>`;
+                                    AyatContainer.innerHTML += `<p>${aya.text}  {${aya.numberInSurah}}</p>`;
                                 }
-                            });
+                            })                  
                         })
-                        .catch(error => {
-                            console.error('Error fetching Surah:', error);
-                        });
-                });
-            });
+                })
+            })
             let closePopup = document.querySelector('.close-popup');
-            closePopup.addEventListener('click', () => {
+
+            closePopup.addEventListener('click',()=>{
                 popup.classList.remove('active');
-            });
+            })
+
         })
-        .catch(error => {
-            console.error('Error fetching Surahs:', error);
-        });
 }
 
-function getPrayTimes() {
-    fetch("https://api.aladhan.com/v1/timingsByCity?city=mansoura&country=egypt&method=8")
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            let cards = document.querySelector('.cards');
-            let times = data.data.timings;
-            cards.innerHTML = "";
-            for (let time in times) {
-                cards.innerHTML += `
-                <div class="card">
+// praytime Api
+let cards = document.querySelector('.cards');
+getPrayTimes();
+function getPrayTimes()
+{
+    fetch(" https://api.aladhan.com/v1/timingsByCity?city=mansoura&country=egypt&method=8")
+    .then(response => response.json())
+    .then(data => {
+        let times = data.data.timings
+        cards.innerHTML ="";
+        for (let time in times)
+        {
+            cards.innerHTML +=
+            `
+            <div class="card">
                     <div class="circle">
                         <svg>
                             <circle cx="100" cy="100" r="100"></circle>
                         </svg>
-                        <div class="praytime">${times[time]}</div>
+                        <div class="praytime"> ${times[time]}</div>
                     </div>
                     <p>${time}</p>
-                </div>`;
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching Pray Times:', error);
-        });
-}
+                </div>
 
+            `
+
+        }
+    })
+}
 let bars = document.querySelector('.bars'),
     sideBar = document.querySelector('.header ul');
 bars.addEventListener('click',()=>{
