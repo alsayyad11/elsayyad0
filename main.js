@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function getSurahs() {
-    fetch("http://api.alquran.cloud/v1/meta")
+    fetch("https://api.alquran.cloud/v1/meta")
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -144,7 +144,7 @@ function getSurahs() {
 }
 
 function getPrayTimes() {
-    fetch("http://api.aladhan.com/v1/timingsByCity?city=mansoura&country=egypt&method=8")
+    fetch("https://api.aladhan.com/v1/timingsByCity?city=mansoura&country=egypt&method=8")
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
