@@ -4,7 +4,8 @@
     font-family:'cairo-bold';
 *****/
 /** Global Style **/
-* {
+* 
+{
     padding: 0;
     margin: 0;
     box-sizing: border-box;
@@ -48,6 +49,7 @@ ul,li
 
 .main .container .overlay {
     background: linear-gradient(#0009, #38d1ff90, #0009);
+
     height: 100%;
     width: 100%;
     position: absolute;
@@ -210,7 +212,6 @@ section h3::before {
 		background-size: 25px;
 		background-repeat: no-repeat;
 }
-
 .theme-mode:checked + .theme-toggle{
     background-color: lightgray;
     
