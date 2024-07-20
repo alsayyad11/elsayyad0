@@ -37,6 +37,15 @@ section {
     padding: 70px 0;
 }
 
+#special-heading {
+    color: white;
+    font-size: 24px;
+    text-align: center;
+    
+    padding: 10px;
+    border-radius: 5px;
+  }
+
 section h3 {
     font-size: 30px;
     text-align: center;
