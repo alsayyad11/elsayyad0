@@ -130,6 +130,20 @@ let cards = document.querySelector('.cards');
 getPrayTimes();
 function getPrayTimes()
 {
+    // const  = new Map();
+    let arabicPrayers = {
+        "Fajr": "الفجر",
+        "Sunrise": "الشروق",
+        "Dhuhr": "الظهر",
+        "Asr": "العصر",
+        "Sunset": "الغروب",
+        "Maghrib": "المغرب",
+        "Isha": "العشاء",
+        "Imsak": "الإمساك",
+        "Midnight": "منتصف الليل",
+        "Firstthird": "الثلث الأول",
+        "Lastthird": "الثلث الثالث",
+    }
     fetch(" https://api.aladhan.com/v1/timingsByCity?city=mansoura&country=egypt&method=8")
     .then(response => response.json())
     .then(data => {
@@ -137,6 +151,8 @@ function getPrayTimes()
         cards.innerHTML ="";
         for (let time in times)
         {
+            if(time === "Sunset" || time === "Imsak" || time === "Midnight" || time === "Firstthird" || time === "Lastthird") continue;
+            const timeArr = times[time].split(":");
             cards.innerHTML +=
             `
             <div class="card">
@@ -144,9 +160,13 @@ function getPrayTimes()
                         <svg>
                             <circle cx="100" cy="100" r="100"></circle>
                         </svg>
-                        <div class="praytime"> ${times[time]}</div>
+                        <div class="praytime"> 
+                            ${timeArr[0]>12
+                            ?timeArr[0]-12+":"+timeArr[1]+"<sub>PM</sub>"
+                            :timeArr[0]-0+":"+timeArr[1]+"<sub>AM</sub>"}
+                        </div>
                     </div>
-                    <p>${time}</p>
+                    <p>${arabicPrayers[time]}</p>
                 </div>
 
             `
@@ -159,3 +179,41 @@ let bars = document.querySelector('.bars'),
 bars.addEventListener('click',()=>{
     sideBar.classList.toggle("active");
 })
+
+// Theme Switch Section
+const body = document.querySelector("body");
+const input = document.querySelector(".header input");
+const surahCards = document.querySelectorAll(".surahContainer .surah");
+
+const storedMode = JSON.parse(localStorage.getItem("mode"));
+if (storedMode !== null) {
+    input.checked = storedMode;
+    theme();
+} else {
+    input.checked = false;
+}
+
+function theme() {
+    if (input.checked) {
+        document.documentElement.style.setProperty('--popup-color', '#111');
+        document.documentElement.style.setProperty('--general-text', '#fffc');
+        document.documentElement.style.setProperty('--section-color', '#111e');
+        document.documentElement.style.setProperty('--sharp-text', '#fff');
+        document.documentElement.style.setProperty('--select-color', '#00172b');
+    } else {
+        document.documentElement.style.setProperty('--popup-color', '#fff');
+        document.documentElement.style.setProperty('--general-text', '#232323');
+        document.documentElement.style.setProperty('--section-color', '#fffe');
+        document.documentElement.style.setProperty('--sharp-text', '#111');
+        document.documentElement.style.setProperty('--select-color', '#38d1ff');
+    }
+}
+
+input.addEventListener("input", () => {
+    theme();
+    updateLocalStorage();
+});
+
+function updateLocalStorage() {
+    localStorage.setItem("mode", JSON.stringify(input.checked));
+}
