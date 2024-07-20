@@ -47,14 +47,14 @@ ul,li
     padding: 0 10px;
 }
 
-.main .container .overlay {
+/* .main .container .overlay {
 /*     background: linear-gradient(#0009, #38d1ff90, #0009);
  */
     height: 100%;
     width: 100%;
     position: absolute;
     right: 0;
-}
+} */
 
 section {
     padding: 70px 0;
