@@ -48,8 +48,8 @@ ul,li
 }
 
 .main .container .overlay {
-    background: linear-gradient(#0009, #38d1ff90, #0009);
-
+/*     background: linear-gradient(#0009, #38d1ff90, #0009);
+ */
     height: 100%;
     width: 100%;
     position: absolute;
