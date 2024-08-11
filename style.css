@@ -96,7 +96,7 @@ section h3::before {
     left: 0;
     right: 0;
     z-index: 1;
-    transition: .5s all ease-in-out;
+    transition: .3s all ease-in-out;
 }
 
 .header .container {
@@ -105,11 +105,12 @@ section h3::before {
     align-items: center;
     height: 70px;
     color: #fff;
-    transition: .5s all ease-in-out;
+    transition: .3s all ease-in-out;
 }
 
 .header.active {
     background-color: rgba(0, 0, 0, .6);
+    backdrop-filter: blur(30px);
 }
 
 .header.active .container {
@@ -489,6 +490,26 @@ section h3::before {
     font-weight: bold; /* تطبيق الخط العريض لاسم السور */
 }
 /* pray time */
+
+.region-card{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: auto;
+    width: 400px;
+}
+
+.region-card select {
+    padding: 0.5rem 1rem ;
+    cursor: pointer;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+    background-color: #238fe8;
+    color: #fff;
+
+}
+
 .pray .cards {
     display: flex;
     flex-wrap: wrap;
@@ -736,5 +757,12 @@ section h3::before {
     .header li:not(:last-of-type)
     {
         margin: 15px 0;
+    }
+}
+
+
+@media (max-width:450px){
+    .region-card{
+        width: 90%;
     }
 }

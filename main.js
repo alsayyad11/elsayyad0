@@ -125,10 +125,78 @@ function getSurahs() {
         })
 }
 
+
+// fetch countries and cites API
+const APiConfig = {
+    cUrl: 'https://api.countrystatecity.in/v1/countries',
+    ckey: 'NHhvOEcyWk50N2Vna3VFTE00bFp3MjFKR0ZEOUhkZlg4RTk1MlJlaA=='
+}
+
+var selectedCountry = document.getElementById('selected_country');
+var selectedState = document.getElementById('selected_state');
+let string_selected_country = '';
+let string_selected_state = '';
+var getCountryNameByIso = {};
+var getStatesNameByIso = {};
+
+selectedCountry.addEventListener('change',function(){
+    var country_id = selectedCountry.value;
+    string_selected_country = getCountryNameByIso[country_id];
+    loadStates(country_id);
+})
+
+selectedState.addEventListener('change', function(){
+    string_selected_state = getStatesNameByIso[selectedState.value];
+    getPrayTimes(string_selected_country, string_selected_state);
+});
+
+function loadCountries() {
+
+    let apiEndPoint = APiConfig.cUrl
+
+    fetch(apiEndPoint, {headers: {"X-CSCAPI-KEY": APiConfig.ckey}})
+    .then(Response => Response.json())
+    .then(data => {
+
+        data.forEach(country => {
+            const option = document.createElement('option')
+            option.value = country.iso2
+            getCountryNameByIso[country.iso2] = country.name;
+            option.textContent = country.name 
+            selectedCountry.appendChild(option)
+        })
+    })
+    .catch(error => console.error('Error loading countries:', error))
+
+}
+
+function loadStates(country_code) {
+
+    fetch(`${APiConfig.cUrl}/${country_code}/states`, {headers: {"X-CSCAPI-KEY": APiConfig.ckey}})
+    .then(response => response.json())
+    .then(data => {
+        var statesList = '<option value="#" selected>اختر المنطقة</option>';
+        data.forEach(state => {
+            const option = document.createElement('option')
+            option.value = state.iso2
+            getStatesNameByIso[state.iso2] = state.name;
+            option.textContent = state.name 
+            // selectedState.appendChild(option)
+            statesList += `<option value="${state.iso2}" selected>${state.name}</option>`
+        })
+        selectedState.innerHTML = statesList;
+    })
+    .catch(error => console.error('Error loading countries:', error))
+}
+
+loadCountries()
+// getPrayTimes('Egypt')
+
 // praytime Api
 let cards = document.querySelector('.cards');
-getPrayTimes();
-function getPrayTimes()
+// getPrayTimes();
+
+function getPrayTimes(country, state)
 {
     // const  = new Map();
     let arabicPrayers = {
@@ -144,7 +212,8 @@ function getPrayTimes()
         "Firstthird": "الثلث الأول",
         "Lastthird": "الثلث الثالث",
     }
-    fetch(" https://api.aladhan.com/v1/timingsByCity?city=mansoura&country=egypt&method=8")
+    // fetch("https://api.aladhan.com/v1/timingsByCity?city=mansoura&country=egypt&method=8")
+    fetch(`https://api.aladhan.com/v1/timingsByCity?city=${state}&country=${country}&method=8`)
     .then(response => response.json())
     .then(data => {
         let times = data.data.timings
