@@ -152,12 +152,12 @@ selectedState.addEventListener('change', function(){
 
 function loadCountries() {
 
-    let apiEndPoint = APiConfig.cUrl
+    // let apiEndPoint = APiConfig.cUrl
+    let apiEndPoint = window.location.href + 'locale/countries.json';
 
     fetch(apiEndPoint, {headers: {"X-CSCAPI-KEY": APiConfig.ckey}})
     .then(Response => Response.json())
     .then(data => {
-
         data.forEach(country => {
             const option = document.createElement('option')
             option.value = country.iso2
@@ -165,6 +165,7 @@ function loadCountries() {
             option.textContent = country.name 
             selectedCountry.appendChild(option)
         })
+        
     })
     .catch(error => console.error('Error loading countries:', error))
 
@@ -172,16 +173,17 @@ function loadCountries() {
 
 function loadStates(country_code) {
 
-    fetch(`${APiConfig.cUrl}/${country_code}/states`, {headers: {"X-CSCAPI-KEY": APiConfig.ckey}})
+    // fetch(`${APiConfig.cUrl}/${country_code}/states`, {headers: {"X-CSCAPI-KEY": APiConfig.ckey}})
+    fetch(`${window.location.href}locale/states.json`, {headers: {"X-CSCAPI-KEY": APiConfig.ckey}})
     .then(response => response.json())
     .then(data => {
         var statesList = '<option value="#" selected>اختر المنطقة</option>';
-        data.forEach(state => {
+        
+        data[country_code].forEach(state => {
             const option = document.createElement('option')
             option.value = state.iso2
             getStatesNameByIso[state.iso2] = state.name;
-            option.textContent = state.name 
-            // selectedState.appendChild(option)
+            option.textContent = state.name;
             statesList += `<option value="${state.iso2}" selected>${state.name}</option>`
         })
         selectedState.innerHTML = statesList;
@@ -189,8 +191,10 @@ function loadStates(country_code) {
     .catch(error => console.error('Error loading countries:', error))
 }
 
+
+
+
 loadCountries()
-// getPrayTimes('Egypt')
 
 // praytime Api
 let cards = document.querySelector('.cards');
@@ -198,6 +202,8 @@ let cards = document.querySelector('.cards');
 
 function getPrayTimes(country, state)
 {
+
+
     // const  = new Map();
     let arabicPrayers = {
         "Fajr": "الفجر",
