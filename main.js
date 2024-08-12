@@ -150,10 +150,15 @@ selectedState.addEventListener('change', function(){
     getPrayTimes(string_selected_country, string_selected_state);
 });
 
+if (window.location.protocol == 'https'){
+    var host = window.location.protocol + "//" + window.location.host + window.location.pathname;
+}else{
+    var host = window.location.protocol + "//" + window.location.host + '/';
+}
 function loadCountries() {
 
     // let apiEndPoint = APiConfig.cUrl
-    let apiEndPoint = window.location.href + 'locale/countries.json';
+    let apiEndPoint =  host + 'locale/countries.json' ;
 
     fetch(apiEndPoint, {headers: {"X-CSCAPI-KEY": APiConfig.ckey}})
     .then(Response => Response.json())
@@ -174,7 +179,7 @@ function loadCountries() {
 function loadStates(country_code) {
 
     // fetch(`${APiConfig.cUrl}/${country_code}/states`, {headers: {"X-CSCAPI-KEY": APiConfig.ckey}})
-    fetch(`${window.location.href}locale/states.json`, {headers: {"X-CSCAPI-KEY": APiConfig.ckey}})
+    fetch(`${host}locale/states.json`, {headers: {"X-CSCAPI-KEY": APiConfig.ckey}})
     .then(response => response.json())
     .then(data => {
         var statesList = '<option value="#" selected>اختر المنطقة</option>';
