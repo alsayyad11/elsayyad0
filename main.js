@@ -150,11 +150,12 @@ selectedState.addEventListener('change', function(){
     getPrayTimes(string_selected_country, string_selected_state);
 });
 
-if (window.location.protocol == 'https'){
+if (window.location.protocol == 'https:'){
     var host = window.location.protocol + "//" + window.location.host + window.location.pathname;
 }else{
     var host = window.location.protocol + "//" + window.location.host + '/';
 }
+
 function loadCountries() {
 
     // let apiEndPoint = APiConfig.cUrl
