@@ -151,7 +151,7 @@ selectedState.addEventListener('change', function(){
 });
 
 if (window.location.protocol == 'https:'){
-    var host = window.location.protocol + "//" + window.location.host + window.location.pathname;
+    var host = "https://thehunter00.github.io/elsayyad0/";
 }else{
     var host = window.location.protocol + "//" + window.location.host + '/';
 }
