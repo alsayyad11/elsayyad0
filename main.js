@@ -70,6 +70,9 @@ links.forEach(link => {
 //surah Api
 let SurahContainer = document.querySelector('.surahContainer')
 getSurahs()
+
+
+
 function getSurahs() {
     fetch("https://api.alquran.cloud/v1/meta")
         .then(response => response.json())
@@ -177,6 +180,34 @@ function loadCountries() {
 
 }
 
+let selected_state;
+async function setCurrentPrayTime (country_name, state, country_code){
+    var countries_options = selectedCountry.querySelectorAll('option');
+
+    countries_options.forEach(c=>c.selected=false);
+    countries_options.forEach(co =>{
+        if (co.textContent == country_name){
+            co.selected = true;
+        }
+    }
+)
+
+    loadStates(country_code);
+    
+    selected_state = state;
+    // var states_options = selectedState.querySelectorAll('option');
+    // console.log(states_options)
+    // states_options.forEach(st=>{st.selected=false});
+    // states_options.forEach(st=>{
+    //     if (st.textContent == state){
+    //         st.selected = true;
+    //     }
+    // })
+
+
+    getPrayTimes(country_name, state);
+}
+
 function loadStates(country_code) {
 
     // fetch(`${APiConfig.cUrl}/${country_code}/states`, {headers: {"X-CSCAPI-KEY": APiConfig.ckey}})
@@ -193,6 +224,16 @@ function loadStates(country_code) {
             statesList += `<option value="${state.iso2}" selected>${state.name}</option>`
         })
         selectedState.innerHTML = statesList;
+        if (selected_state){
+            var states_options = selectedState.querySelectorAll('option');
+            console.log(states_options)
+            states_options.forEach(st=>{st.selected=false});
+            states_options.forEach(st=>{
+                if (st.textContent == selected_state){
+                    st.selected = true;
+                }
+            })
+        }
     })
     .catch(error => console.error('Error loading countries:', error))
 }
