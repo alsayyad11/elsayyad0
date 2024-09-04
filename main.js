@@ -167,11 +167,13 @@ function loadCountries() {
     fetch(apiEndPoint, {headers: {"X-CSCAPI-KEY": APiConfig.ckey}})
     .then(Response => Response.json())
     .then(data => {
+        data = data.filter(_=>_.show).sort((a, b) => (a.ARName > b.ARName ? 1 : -1));
         data.forEach(country => {
-            const option = document.createElement('option')
-            option.value = country.iso2
+            const option = document.createElement('option');
+            option.value = country.iso2;
+            option.id = country.name;
             getCountryNameByIso[country.iso2] = country.name;
-            option.textContent = country.name 
+            option.innerHTML = `${country.emoji} ${country.ARName || country.name} | <sub>${country.native==country.ARName?country.name:country.native}</sub>`;
             selectedCountry.appendChild(option)
         })
         
@@ -186,7 +188,7 @@ async function setCurrentPrayTime (country_name, state, country_code){
 
     countries_options.forEach(c=>c.selected=false);
     countries_options.forEach(co =>{
-        if (co.textContent == country_name){
+        if (co.id == country_name){
             co.selected = true;
         }
     }
@@ -221,7 +223,7 @@ function loadStates(country_code) {
             option.value = state.iso2
             getStatesNameByIso[state.iso2] = state.name;
             option.textContent = state.name;
-            statesList += `<option value="${state.iso2}" selected>${state.name}</option>`
+            statesList += `<option value="${state.iso2}" id="${state.name}" selected>${state.ARName || state.name} ${state.ARName?`| <sub>${state.name}</sub>`:""}</option>`
         })
         selectedState.innerHTML = statesList;
         if (selected_state){
@@ -229,7 +231,7 @@ function loadStates(country_code) {
             console.log(states_options)
             states_options.forEach(st=>{st.selected=false});
             states_options.forEach(st=>{
-                if (st.textContent == selected_state){
+                if (st.id == selected_state){
                     st.selected = true;
                 }
             })
